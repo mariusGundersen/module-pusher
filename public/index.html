@@ -1,9 +1,12 @@
 <!doctype html>
 
+<script>
+  navigator.serviceWorker.register('./service-worker.js').then(function() {
+    console.log('Service worker registered');
+  });
+</script>
 <script src="/node_modules/traceur/bin/traceur.js"></script>
 <script src="/node_modules/es6-module-loader/dist/es6-module-loader-dev.src.js"></script>
-<script>
-</script>
 <script>
   System.import('mymodule.js').then(function(m) {
     new m.q();
