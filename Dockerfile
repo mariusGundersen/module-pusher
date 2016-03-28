@@ -1,3 +1,4 @@
 FROM node:4.2-onbuild
 
+ENV PORT 443
 EXPOSE 443

@@ -74,7 +74,7 @@ analyze({
     cert: fs.readFileSync('./certs/localhost.crt')
   };
 
-  http2.createServer(options, app).listen(443);
+  http2.createServer(options, app).listen(process.env.PORT || 8080);
   function app(req, res) {
       router(req, res, finalhandler(req, res));
   }
