@@ -8,7 +8,9 @@
 <script src="/node_modules/traceur/bin/traceur.js"></script>
 <script src="/node_modules/es6-module-loader/dist/es6-module-loader-dev.src.js"></script>
 <script>
-  System.import('mymodule.js').then(function(m) {
-    new m.q();
-  }, e => console.error(e));
+  setTimeout(function(){
+    System.import('modules/mymodule.js').then(function(m) {
+      new m.q();
+    }, e => console.error(e));
+  }, 1000);
 </script>

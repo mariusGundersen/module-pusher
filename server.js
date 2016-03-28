@@ -7,6 +7,12 @@ var Router = require('router');
 express.static.mime.define({'application/javascript': ['js']});
 
 var router = new Router();
+router.use(function(req, res, next){
+  if(req.url.includes('/modules/')){
+    console.log(req.url, req.headers['bloom-filter']);
+  }
+  next();
+});
 router.use('/node_modules',express.static('node_modules', {
   maxAge: 0
 }));
