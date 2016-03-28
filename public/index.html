@@ -1,8 +1,9 @@
 <!doctype html>
 
 <script>
-  navigator.serviceWorker.register('./service-worker.js').then(function() {
+  navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
     console.log('Service worker registered');
+    console.log(reg.waiting, reg.installing, reg.active);
   });
 
   function unregister(){
@@ -18,6 +19,7 @@
 <script src="/node_modules/es6-module-loader/dist/es6-module-loader-dev.src.js"></script>
 <script>
   setTimeout(function(){
+    console.log('import');
     System.import('modules/mymodule.js').then(function(m) {
       new m.q();
     }, e => console.error(e));
