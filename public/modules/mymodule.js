@@ -1,4 +1,5 @@
 import dep1 from 'modules/dep1.js';
+import dep2 from 'modules/dep2.js';
 
 export class q {
   constructor() {

@@ -1,4 +1,4 @@
-var version = '2016-3-28-20:14:00';
+var version = '2016-3-28-20:26:00';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);
@@ -55,9 +55,9 @@ self.addEventListener('fetch', function(event) {
           console.warn('[ServiceWorker] Missing cache, fetching!');
           return cache.keys().then(keys => {
             var bf = new BloomFilter(256, 6);
-            keys.forEach(k => bf.add(k.url));
+            keys.forEach(k => bf.add(new URL(k.url).pathname));
             var bfs = JSON.stringify(bf.buckets);
-            console.log('[ServiceWorker] keys:', keys.map(k => k.url), bfs);
+            console.log('[ServiceWorker] keys:', keys.map(k => new URL(k.url).pathname), bfs);
             var fetchRequest = new Request(event.request.url, {
               headers: new Headers({
                 'bloom-filter': bfs

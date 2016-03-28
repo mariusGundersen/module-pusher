@@ -1,3 +1,4 @@
+var Bloomfilter = require('bloomfilter').BloomFilter;
 var express = require('express');
 var finalhandler = require('finalhandler');
 var fs = require('fs');
@@ -10,6 +11,8 @@ var router = new Router();
 router.use(function(req, res, next){
   if(req.url.includes('/modules/')){
     console.log(req.url, req.headers['bloom-filter']);
+    var bf = new Bloomfilter(JSON.parse(req.headers['bloom-filter'] || []), 6);
+    console.log('has dep1.js', bf.test("/modules/dep1.js"));
   }
   next();
 });
