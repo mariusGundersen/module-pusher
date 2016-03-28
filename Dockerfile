@@ -1,3 +1,3 @@
-FROM node-onbuild:4.2
+FROM node:4.2-onbuild
 
 EXPOSE 443
