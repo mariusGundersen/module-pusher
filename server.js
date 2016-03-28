@@ -3,6 +3,7 @@ var express = require('express');
 var finalhandler = require('finalhandler');
 var fs = require('fs');
 var http2 = require('http2');
+var path = require('path');
 var Router = require('router');
 
 express.static.mime.define({'application/javascript': ['js']});
@@ -10,9 +11,22 @@ express.static.mime.define({'application/javascript': ['js']});
 var router = new Router();
 router.use(function(req, res, next){
   if(req.url.includes('/modules/')){
-    console.log(req.url, req.headers['bloom-filter']);
-    var bf = new Bloomfilter(JSON.parse(req.headers['bloom-filter'] || []), 6);
-    console.log('has dep1.js', bf.test("/modules/dep1.js"));
+    if (res.push) {
+      console.log(req.url, req.headers['bloom-filter']);
+      var bf = new Bloomfilter(JSON.parse(req.headers['bloom-filter'] || []), 6);
+      var hasDep1 = bf.test("/modules/dep1.js");
+      console.log('has dep1.js', hasDep1);
+      if(!hasDep1){
+        try{
+        console.log('pushing dep1.js');
+        var push = res.push('/modules/dep1.js');
+        push.writeHead(200);
+        fs.createReadStream(path.join(__dirname, '/public/modules/dep1.js')).pipe(push);
+        }catch(e){
+          console.error(e);
+        }
+      }
+    }
   }
   next();
 });

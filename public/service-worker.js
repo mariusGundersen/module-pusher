@@ -1,4 +1,4 @@
-var version = '2016-3-28-20:26:00';
+var version = '2016-3-28-20:37:00';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);
@@ -44,7 +44,7 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   console.log('[ServiceWorker] fetching', event.request.url);
   if (event.request.url.includes('/modules/')) {
-    console.log('[ServiceWorker] Serving mymodule.js for', event.request.url);
+    console.log('[ServiceWorker] Serving', event.request.url);
     event.respondWith(
       caches.open(version).then(function(cache) {
         return cache.match(event.request).then(function(response) {
@@ -52,7 +52,7 @@ self.addEventListener('fetch', function(event) {
             return response;
           }
 
-          console.warn('[ServiceWorker] Missing cache, fetching!');
+          console.warn('[ServiceWorker] Cache is missing '+event.request.url+', fetching!');
           return cache.keys().then(keys => {
             var bf = new BloomFilter(256, 6);
             keys.forEach(k => bf.add(new URL(k.url).pathname));
