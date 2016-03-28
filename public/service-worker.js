@@ -1,4 +1,4 @@
-var version = '2016-3-28-20:37:00';
+var version = '2016-3-28-20:45:00';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);
@@ -74,8 +74,8 @@ self.addEventListener('fetch', function(event) {
               cache.put(event.request, responseToCache);
 
               return response;
-            }, e => console.error(e));
-          }, e => console.error(e));
+            }, e => console.error(e.stack || e));
+          }, e => console.error(e.stack || e));
         });
       })
     );

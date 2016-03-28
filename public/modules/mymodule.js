@@ -3,6 +3,6 @@ import dep2 from 'modules/dep2.js';
 
 export class q {
   constructor() {
-    console.log('this is an es6 class!');
+    console.log('this is an es6 class!', dep1(), dep2());
   }
 }

@@ -4,6 +4,15 @@
   navigator.serviceWorker.register('./service-worker.js').then(function() {
     console.log('Service worker registered');
   });
+
+  function unregister(){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(reg){
+        console.log('Service worker unregistered', reg);
+        reg.unregister();
+      });
+    });
+  }
 </script>
 <script src="/node_modules/traceur/bin/traceur.js"></script>
 <script src="/node_modules/es6-module-loader/dist/es6-module-loader-dev.src.js"></script>
@@ -16,3 +25,4 @@
 </script>
 
 <a href="page2.html">Page2</a>
+<button type="button" onclick="unregister()">Unregister</button>
