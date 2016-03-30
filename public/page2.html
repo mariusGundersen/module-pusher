@@ -1,13 +1,12 @@
 <!doctype html>
 
-<script src="/node_modules/traceur/bin/traceur.js"></script>
-<script src="/node_modules/es6-module-loader/dist/es6-module-loader-dev.src.js"></script>
+<script src="/node_modules/systemjs/dist/system-register-only.js"></script>
 <script>
-  setTimeout(function(){
-    System.import('modules/page2.js').then(function(m) {
-      new m.default();
-    }, e => console.error(e));
-  }, 1000);
+  console.time('import');
+  System.import('modules/page2.js').then(function(m) {
+    new m.default();
+    console.timeEnd('import');
+  }, e => console.error(e));
 </script>
 
 <a href="index.html">Home</a>

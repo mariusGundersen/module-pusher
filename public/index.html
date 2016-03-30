@@ -1,10 +1,19 @@
 <!doctype html>
 
+<script src="/node_modules/systemjs/dist/system-register-only.js"></script>
 <script>
+  navigator.serviceWorker.onerror = function(e){
+    console.error(e);
+  }
   navigator.serviceWorker.register('./bin/service-worker.js').then(function(reg) {
     console.log('Service worker registered');
     console.log(reg.waiting, reg.installing, reg.active);
-  });
+
+    console.log('import');
+    System.import('modules/mymodule.js').then(function(m) {
+      new m.q();
+    }, e => console.error(e.message, e.stack));
+  }, e => console.error(e));
 
   function unregister(){
     navigator.serviceWorker.getRegistrations().then(function(regs){
@@ -14,16 +23,6 @@
       });
     });
   }
-</script>
-<script src="/node_modules/traceur/bin/traceur.js"></script>
-<script src="/node_modules/es6-module-loader/dist/es6-module-loader-dev.src.js"></script>
-<script>
-  setTimeout(function(){
-    console.log('import');
-    System.import('modules/mymodule.js').then(function(m) {
-      new m.q();
-    }, e => console.error(e));
-  }, 1000);
 </script>
 
 <a href="page2.html">Page2</a>

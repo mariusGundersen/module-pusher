@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel public/src -d public/bin --presets es2015-native-generators --no-babelrc -s"
+    "build-sw": "babel public/src -d public/bin --presets es2015-native-generators --no-babelrc -s",
+    "watch-sw": "babel public/src -d public/bin --presets es2015-native-generators --no-babelrc -s -w",
+    "build-modules": "babel public/modules-src -d public/modules -s",
+    "watch-modules": "babel public/modules-src -d public/modules -s -w"
   },
   "keywords": [],
   "author": "",
@@ -13,13 +16,14 @@
   "dependencies": {
     "analyze-es6-modules": "^0.6.0",
     "bloomfilter": "0.0.16",
-    "es6-module-loader": "^0.17.11",
     "express": "^4.13.4",
     "finalhandler": "^0.4.1",
+    "glob": "^7.0.3",
     "http2": "^3.3.2",
     "lodash": "^4.6.1",
     "router": "^1.1.4",
-    "traceur": "0.0.104"
+    "system-trace": "^0.2.1",
+    "systemjs": "^0.19.25"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
