@@ -1,4 +1,4 @@
-var version = '2016-3-28-20:45:00';
+var version = '2016-3-30-22:45:00';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);
@@ -20,72 +20,53 @@ self.addEventListener('activate', function(event) {
     console.log('[ServiceWorker] Matching clients:', urls.join(', '));
   });
 
-  event.waitUntil(
+  event.waitUntil(async () => {
     // Delete old cache entries that don't match the current version.
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(
-        cacheNames.map(function(cacheName) {
-          if (cacheName !== version) {
-            console.log('[ServiceWorker] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(function() {
-      // `claim()` sets this worker as the active worker for all clients that
-      // match the workers scope and triggers an `oncontrollerchange` event for
-      // the clients.
-      console.log('[ServiceWorker] Claiming clients for version', version);
-      return self.clients.claim();
-    })
-  );
+    const cacheNames = caches.keys();
+    await Promise.all(
+      cacheNames.filter(name => name !== version).map(function(cacheName) {
+          console.log('[ServiceWorker] Deleting old cache:', cacheName);
+          return caches.delete(cacheName);
+      })
+    );
+    // `claim()` sets this worker as the active worker for all clients that
+    // match the workers scope and triggers an `oncontrollerchange` event for
+    // the clients.
+    console.log('[ServiceWorker] Claiming clients for version', version);
+    return await self.clients.claim();
+  });
 });
 
 self.addEventListener('fetch', function(event) {
   console.log('[ServiceWorker] fetching', event.request.url);
   if (event.request.url.includes('/modules/')) {
     console.log('[ServiceWorker] Serving', event.request.url);
-    event.respondWith(
-      caches.open(version).then(function(cache) {
-        return cache.match(event.request).then(function(response) {
-          if(response){
-            return response;
-          }
-
-          console.warn('[ServiceWorker] Cache is missing '+event.request.url+', fetching!');
-          return cache.keys().then(keys => {
-            var bf = new BloomFilter(256, 6);
-            keys.forEach(k => bf.add(new URL(k.url).pathname));
-            var bfs = JSON.stringify(bf.buckets);
-            console.log('[ServiceWorker] keys:', keys.map(k => new URL(k.url).pathname), bfs);
-            var fetchRequest = new Request(event.request.url, {
-              headers: new Headers({
-                'bloom-filter': bfs
-              })
-            });
-            return fetch(fetchRequest)
-            .then(function(response) {
-              // Check if we received a valid response
-              if(!response || response.status !== 200 || response.type !== 'basic') {
-                return response;
-              }
-
-              var responseToCache = response.clone();
-              cache.put(event.request, responseToCache);
-
-              return response;
-            }, e => console.error(e.stack || e));
-          }, e => console.error(e.stack || e));
-        });
-      })
-    );
-  }
-  if (event.request.url.includes('/version')) {
-    event.respondWith(new Response(version, {
-      headers: {
-        'content-type': 'text/plain'
+    event.respondWith(async () => {
+      const cache = await caches.open(version);
+      let response = await cache.match(event.request);
+      if(response){
+        return response;
       }
-    }));
+
+      console.warn(`[ServiceWorker] Cache is missing ${event.request.url}, fetching!`);
+      const keys = await cache.keys();
+      const bf = new BloomFilter(256, 6);
+      keys.forEach(k => bf.add(new URL(k.url).pathname));
+      const bfs = JSON.stringify(bf.buckets);
+      console.log('[ServiceWorker] keys:', keys.map(k => new URL(k.url).pathname), bfs);
+      const fetchRequest = new Request(event.request.url, {
+        headers: new Headers({
+          'bloom-filter': bfs
+        })
+      });
+
+      response = await fetch(fetchRequest);
+      if(response && response.status === 200 && response.type === 'basic') {
+        cache.put(event.request, response.clone());
+      }
+
+      return response;
+    });
   }
 });
 

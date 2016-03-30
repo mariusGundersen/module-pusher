@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel public/src -d public/bin --presets es2015-native-generators --no-babelrc -s"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +20,10 @@
     "lodash": "^4.6.1",
     "router": "^1.1.4",
     "traceur": "0.0.104"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-plugin-transform-es2015-modules-systemjs": "^6.6.5",
+    "babel-preset-es2015-native-generators": "^6.6.0"
   }
 }
