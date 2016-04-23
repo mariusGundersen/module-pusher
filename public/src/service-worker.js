@@ -1,4 +1,4 @@
-var version = '1';
+var version = '<% VERSION %>';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);

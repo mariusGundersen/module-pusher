@@ -4,6 +4,7 @@ import gulp from 'gulp';
 import del from 'del';
 import babel from 'gulp-babel';
 import concat from 'gulp-concat';
+import replace from 'gulp-replace';
 import sourcemaps from 'gulp-sourcemaps';
 
 // CLEAN
@@ -31,6 +32,7 @@ gulp.task('build-sw', ['clean-sw'], () => {
       babelrc: false
     }))
     .pipe(concat('service-worker.js'))
+    .pipe(replace('<% VERSION %>', new Date().toISOString()))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/bin'));
 });
