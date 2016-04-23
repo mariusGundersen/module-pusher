@@ -13,7 +13,6 @@
   "dependencies": {
     "analyze-es6-modules": "^0.6.0",
     "bloomfilter": "0.0.16",
-    "express": "^4.13.4",
     "finalhandler": "^0.4.1",
     "fs-promise": "^0.5.0",
     "glob-promise": "^1.0.6",
@@ -21,6 +20,7 @@
     "http2": "^3.3.2",
     "lodash": "^4.6.1",
     "router": "^1.1.4",
+    "serve-static": "^1.10.2",
     "system-trace": "^0.2.1",
     "systemjs": "^0.19.25"
   },

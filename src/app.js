@@ -1,5 +1,5 @@
 
-import express from 'express';
+import serveStatic from 'serve-static';
 import finalhandler from 'finalhandler';
 import fs from 'fs-promise';
 import glob from 'glob-promise';
@@ -21,18 +21,20 @@ export default async function(){
     next();
   });
 
-  router.use('/node_modules',express.static('node_modules', {
+  router.use('/node_modules', serveStatic('node_modules', {
     maxAge: 60*60*24*1000
   }));
 
-  router.use('/',express.static('public/bin', {
+  router.use('/', serveStatic('public/bin', {
     maxAge: 0,
-    etag: false
+    etag: false,
+    lastModified: false
   }));
 
-  router.use('/',express.static('public', {
+  router.use('/', serveStatic('public', {
     maxAge: 0,
-    etag: false
+    etag: false,
+    lastModified: false
   }));
 
   const [key, cert] = await Promise.all([
