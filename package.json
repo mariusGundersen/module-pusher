@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-sw": "babel public/src -d public/bin --presets es2015-native-generators --no-babelrc -s",
-    "watch-sw": "babel public/src -d public/bin --presets es2015-native-generators --no-babelrc -s -w",
-    "build-modules": "babel public/modules-src -d public/modules -s",
-    "watch-modules": "babel public/modules-src -d public/modules -s -w"
+    "build": "gulp build"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +16,7 @@
     "express": "^4.13.4",
     "finalhandler": "^0.4.1",
     "glob-promise": "^1.0.6",
+    "gulp-concat": "^2.6.0",
     "http2": "^3.3.2",
     "lodash": "^4.6.1",
     "router": "^1.1.4",
@@ -26,8 +24,11 @@
     "systemjs": "^0.19.25"
   },
   "devDependencies": {
-    "babel-cli": "^6.6.5",
     "babel-plugin-transform-es2015-modules-systemjs": "^6.6.5",
-    "babel-preset-es2015-native-generators": "^6.6.0"
+    "babel-preset-es2015-native-generators": "^6.6.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^1.6.0"
   }
 }

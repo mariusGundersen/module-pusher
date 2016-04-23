@@ -1,4 +1,3 @@
 {
-  "presets": ["es2015-native-generators"],
-  "plugins": ["transform-es2015-modules-systemjs"]
+  "presets": ["es2015-native-generators"]
 }
