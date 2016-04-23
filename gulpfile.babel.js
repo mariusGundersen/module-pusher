@@ -16,6 +16,10 @@ gulp.task('clean-modules', () => {
   return del('public/modules/*');
 });
 
+gulp.task('clean-server', () => {
+  return del('bin/*');
+});
+
 
 // BUILD
 
@@ -43,7 +47,19 @@ gulp.task('build-modules', ['clean-modules'], () => {
     .pipe(gulp.dest('public/modules'));
 });
 
-gulp.task('build', ['build-sw', 'build-modules'], () => {})
+gulp.task('build-server', ['clean-server'], () => {
+  return gulp.src('src/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['es2015-native-generators'],
+      plugins: ['add-module-exports'],
+      babelrc: false
+    }))
+    .pipe(sourcemaps.write('.', {sourceRoot: '../src'}))
+    .pipe(gulp.dest('bin'));
+});
+
+gulp.task('build', ['build-sw', 'build-modules', 'build-server'], () => {})
 
 // WATCH
 
@@ -55,4 +71,8 @@ gulp.task('watch-modules', ['build-modules'], () => {
   return gulp.watch('public/modules-src/*.js', ['build-modules']);
 });
 
-gulp.task('watch', ['watch-sw', 'watch-modules'], () => {});
+gulp.task('watch-server', ['build-server'], () => {
+  return gulp.watch('src/*.js', ['build-server']);
+});
+
+gulp.task('watch', ['watch-sw', 'watch-modules', 'watch-server'], () => {});
