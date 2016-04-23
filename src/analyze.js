@@ -21,8 +21,9 @@ export default async function(){
   const modules = new Map();
   for(var name in System._loader.moduleRecords){
     var record = System._loader.moduleRecords[name];
-    modules.set(name, {
+    modules.set('/'+name, {
       dependencies: flattenDepTree(record.dependencies.map(x => x.name), System._loader.moduleRecords, [record.name])
+      .map(dep => '/'+dep)
     });
   }
   console.log(modules);

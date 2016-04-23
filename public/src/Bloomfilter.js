@@ -66,8 +66,7 @@ var BloomFilter = (function(exports) {
   BloomFilter.prototype.toHex = function (){
     return this.buckets
       .map(b => b.toString(16))
-      .map(s => s.padStart(8, '0'))
-      .join('');
+      .join('|');
   };
 
   BloomFilter.fromKeys = function(m, k, keys){

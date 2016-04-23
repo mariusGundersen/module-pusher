@@ -15,7 +15,7 @@ export default async function(){
   var router = new Router();
   router.use(function(req, res, next){
     if (res.push && req.url.includes('/modules/')) {
-      console.log(req.url);
+      console.log(' ');
       tryPush(req, res);
     }
     next();
