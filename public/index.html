@@ -12,7 +12,7 @@
 
     console.log('import');
     return System.import('modules/page1.js').then(function(m) {
-      new m.Page1();
+      document.querySelector('pre').innerText = m.default().join('\n')+'\n'+window.performance.now();
     });
   }).catch(e => console.error(e.message, e.stack));
 
@@ -30,7 +30,10 @@
   }
 </script>
 
-<a href="page2.html">Page2</a>
+<h1>Home</h1>
+<pre></pre>
+<hr />
+<a href="page2.html">Page 2</a> | <a href="page3.html">Page 3</a>
 <hr />
 <button type="button" onclick="unregister()">Unregister</button>
 <button type="button" onclick="clearCache()">Clear cache</button>

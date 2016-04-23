@@ -9,7 +9,7 @@ export default async function(){
   return function tryPush(req, res){
     try{
       const moduleName = req.url;
-      console.log('=>', moduleName);
+      console.log('⇒', moduleName);
       if(!depTree.has(moduleName)){
         return;
       }
@@ -28,9 +28,10 @@ export default async function(){
         console.log(' ', has ? '✔' : '✘', name);
       }
 
+      console.log('⇐', moduleName);
       deps.filter(d => !d.has).forEach(({name}) => {
         try{
-          console.log('<=', name);
+          console.log('⇐', name);
           const push = res.push(name);
           push.setHeader('content-type', 'application/javascript');
           push.writeHead(200);

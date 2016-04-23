@@ -1,8 +1,8 @@
 import dep1 from 'modules/dep1.js';
 import dep2 from 'modules/dep2.js';
 
-export class Page1 {
-  constructor() {
-    console.log('Page1', dep1(), dep2());
-  }
-}
+export default () => [
+  'page1',
+  ...dep1().map(x => ` ${x}`),
+  ...dep2().map(x => ` ${x}`)
+];

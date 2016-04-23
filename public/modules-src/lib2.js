@@ -1,1 +1,1 @@
-export default () => 'lib2';
+export default () => ['lib2'];

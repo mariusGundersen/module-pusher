@@ -37,16 +37,10 @@ function flattenDepTree(imports, tree, ignore){
     .uniq()
     .difference(ignore)
     .value();
-  if(deps.length == 0){
-    return _.chain(imports)
-      .concat(deps)
-      .uniq()
-      .value();
-  }
 
-  return _.chain(flattenDepTree(deps, tree, ignore.concat(imports)))
-    .concat(imports)
+  return _.chain(imports)
     .concat(deps)
+    .concat(deps.length == 0 ? [] : flattenDepTree(deps, tree, ignore.concat(imports)))
     .uniq()
     .value();
 }
