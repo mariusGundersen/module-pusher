@@ -1,11 +1,11 @@
 var _ = require('lodash');
 var fs = require('fs');
-var glob = require('glob');
+var glob = require('glob-promise');
 var path = require('path');
 var System = require('systemjs');
 
 module.exports = function(){
-  return new Promise((res, rej) => glob('modules/*.js', {cwd:'public'}, (err, files) => err ? rej(err) : res(files)))
+  return glob('modules/*.js', {cwd:'public'})
   .then(files => {
     console.log(files);
     System.config({

@@ -1,4 +1,4 @@
-var version = '2016-3-30-22:47:00';
+var version = '2016-3-30-22:48:00';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);
@@ -46,9 +46,7 @@ self.addEventListener('fetch', function(event) {
 
         console.warn(`[ServiceWorker] Cache is missing ${event.request.url}, fetching!`);
         const keys = await cache.keys();
-        const bf = new BloomFilter(256, 6);
-        keys.forEach(k => bf.add(new URL(k.url).pathname));
-        const bfs = JSON.stringify(bf.buckets);
+        var bfs = bloomFilterToHex(keys);
         console.log('[ServiceWorker] keys:', keys.map(k => new URL(k.url).pathname), bfs);
         const fetchRequest = new Request(event.request.url, {
           headers: new Headers({
@@ -68,6 +66,12 @@ self.addEventListener('fetch', function(event) {
     })());
   }
 });
+
+function bloomFilterToHex(keys){
+  const bf = new BloomFilter(256, 6);
+  keys.forEach(k => bf.add(new URL(k.url).pathname));
+  return bf.buckets.map(b => b.toString(16)).map(s => s.padStart(8, '0')).join('');
+}
 
 var BloomFilter = (function(exports) {
   // Creates a new bloom filter.  If *m* is an array-like object, with a length
@@ -174,3 +178,22 @@ var BloomFilter = (function(exports) {
 
   return BloomFilter;
 })();
+
+String.prototype.padStart = String.prototype.padStart || function (maxLength, fillString=' ') {
+  let str = String(this);
+  if (str.length >= maxLength) {
+    return str;
+  }
+
+  fillString = String(fillString);
+  if (fillString.length === 0) {
+    fillString = ' ';
+  }
+
+  let fillLen = maxLength - str.length;
+  let timesToRepeat = Math.ceil(fillLen / fillString.length);
+  let truncatedStringFiller = fillString
+    .repeat(timesToRepeat)
+    .slice(0, fillLen);
+  return truncatedStringFiller + str;
+};

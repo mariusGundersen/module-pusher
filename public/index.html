@@ -5,7 +5,7 @@
   navigator.serviceWorker.onerror = function(e){
     console.error(e);
   }
-  navigator.serviceWorker.register('./bin/service-worker.js').then(function(reg) {
+  navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
     console.log('Service worker registered');
     console.log(reg.waiting, reg.installing, reg.active);
 

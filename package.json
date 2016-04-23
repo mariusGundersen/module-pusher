@@ -18,7 +18,7 @@
     "bloomfilter": "0.0.16",
     "express": "^4.13.4",
     "finalhandler": "^0.4.1",
-    "glob": "^7.0.3",
+    "glob-promise": "^1.0.6",
     "http2": "^3.3.2",
     "lodash": "^4.6.1",
     "router": "^1.1.4",

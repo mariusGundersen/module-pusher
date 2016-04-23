@@ -1,6 +1,5 @@
 var Bloomfilter = require('bloomfilter').BloomFilter;
 var fs = require('fs');
-var glob = require('glob');
 var _ = require('lodash');
 var path = require('path');
 var analyze = require('./analyze');
@@ -9,15 +8,22 @@ module.exports = function(){
   return analyze().then(function(depTree){
     return function tryPush(req, res){
       try{
-        var moduleName = 'modules'+req.url;
+        var moduleName = req.url.substr(1);
+        console.log('moduleName', moduleName);
         var module = depTree[moduleName];
         if(module == null){
           return
         }
 
-        var json = req.headers['bloom-filter'];
-        console.log(moduleName, json);
-        var bf = new Bloomfilter(JSON.parse(json || '[]'), 6);
+        var hex = req.headers['bloom-filter'];
+        var bloomArray = _.chain(hex)
+          .split('')
+          .chunk(8)
+          .map(x => x.join(''))
+          .map(x => parseInt(x, 16))
+          .value();
+        console.log(moduleName, hex);
+        var bf = new Bloomfilter(bloomArray, 6);
         var deps = module.dependencies;
         deps.forEach(dep => {
           var hasDep = bf.test('/'+dep);
