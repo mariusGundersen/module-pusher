@@ -1,11 +1,14 @@
-"use strict";
+'use strict';
 
-System.register([], function (_export, _context) {
+System.register(['modules/lib1.js'], function (_export, _context) {
+  var lib1;
   return {
-    setters: [],
+    setters: [function (_modulesLib1Js) {
+      lib1 = _modulesLib1Js.default;
+    }],
     execute: function () {
-      _export("default", function () {
-        return "dep1";
+      _export('default', function () {
+        return 'dep1: ' + lib1();
       });
     }
   };

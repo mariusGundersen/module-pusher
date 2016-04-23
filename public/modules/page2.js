@@ -1,7 +1,7 @@
 'use strict';
 
-System.register(['modules/dep2.js'], function (_export, _context) {
-  var dep2, Page2;
+System.register(['modules/dep3.js', 'modules/dep4.js'], function (_export, _context) {
+  var dep3, dep4, Page2;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -10,17 +10,19 @@ System.register(['modules/dep2.js'], function (_export, _context) {
   }
 
   return {
-    setters: [function (_modulesDep2Js) {
-      dep2 = _modulesDep2Js.default;
+    setters: [function (_modulesDep3Js) {
+      dep3 = _modulesDep3Js.default;
+    }, function (_modulesDep4Js) {
+      dep4 = _modulesDep4Js.default;
     }],
     execute: function () {
-      Page2 = function Page2() {
+      _export('Page2', Page2 = function Page2() {
         _classCallCheck(this, Page2);
 
-        console.log('page2', dep2());
-      };
+        console.log('Page2', dep3(), dep4());
+      });
 
-      _export('default', Page2);
+      _export('Page2', Page2);
     }
   };
 });

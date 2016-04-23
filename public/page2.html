@@ -2,11 +2,15 @@
 
 <script src="/node_modules/systemjs/dist/system-register-only.js"></script>
 <script>
-  console.time('import');
-  System.import('modules/page2.js').then(function(m) {
-    new m.default();
-    console.timeEnd('import');
-  }, e => console.error(e));
+  navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
+    console.log('Service worker registered');
+    console.log(reg.waiting, reg.installing, reg.active);
+
+    console.log('import');
+    return System.import('modules/page2.js').then(function(m) {
+      new m.Page2();
+    });
+  }).catch(e => console.error(e.message, e.stack));
 </script>
 
 <a href="index.html">Home</a>

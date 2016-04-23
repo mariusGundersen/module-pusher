@@ -1,4 +1,4 @@
-var version = '2016-3-30-22:48:00';
+var version = '1';
 
 self.addEventListener('install', function(event) {
   console.log('[ServiceWorker] Installed version', version);
@@ -11,24 +11,14 @@ self.addEventListener('install', function(event) {
 // called immediately.
 self.addEventListener('activate', function(event) {
   event.waitUntil((async () => {
-    try{
-      // Delete old cache entries that don't match the current version.
-      const cacheNames = await caches.keys();
-      await Promise.all(
-        cacheNames.filter(name => name !== version).map(function(cacheName) {
-            console.log('[ServiceWorker] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-        })
-      );
-      // `claim()` sets this worker as the active worker for all clients that
-      // match the workers scope and triggers an `oncontrollerchange` event for
-      // the clients.
-      console.log('[ServiceWorker] Claiming clients for version', version);
-      await self.clients.claim();
-      console.log('[ServiceWorker] Claimed clients for version', version);
-    }catch(e){
-      console.error(e);
-    }
+    await deleteAllCachesExcept(version);
+
+    // `claim()` sets this worker as the active worker for all clients that
+    // match the workers scope and triggers an `oncontrollerchange` event for
+    // the clients.
+    console.log('[ServiceWorker] Claiming clients for version', version);
+    await self.clients.claim();
+    console.log('[ServiceWorker] Claimed clients for version', version);
   })());
 });
 
@@ -66,6 +56,27 @@ self.addEventListener('fetch', function(event) {
     })());
   }
 });
+
+self.addEventListener('message', function(event) {
+  if(event.data.command === 'clearCache'){
+    deleteAllCachesExcept('');
+  }
+});
+
+async function deleteAllCachesExcept(cacheToKeep) {
+  try{
+    // Delete old cache entries that don't match the current version.
+    const cacheNames = await caches.keys();
+    await Promise.all(
+      cacheNames.filter(name => name !== cacheToKeep).map(function(cacheName) {
+          console.log('[ServiceWorker] Deleting old cache:', cacheName);
+          return caches.delete(cacheName);
+      })
+    );
+  }catch(e){
+    console.error(e);
+  }
+}
 
 function bloomFilterToHex(keys){
   const bf = new BloomFilter(256, 6);

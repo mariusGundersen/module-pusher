@@ -1,1 +1,3 @@
-export default () => "dep1";
+import lib1 from 'modules/lib1.js';
+
+export default () => `dep1: ${lib1()}`;

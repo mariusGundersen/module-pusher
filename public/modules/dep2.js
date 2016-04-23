@@ -1,14 +1,14 @@
 'use strict';
 
-System.register(['modules/dep1.js'], function (_export, _context) {
-  var dep1;
+System.register(['modules/lib2.js'], function (_export, _context) {
+  var lib2;
   return {
-    setters: [function (_modulesDep1Js) {
-      dep1 = _modulesDep1Js.default;
+    setters: [function (_modulesLib2Js) {
+      lib2 = _modulesLib2Js.default;
     }],
     execute: function () {
       _export('default', function () {
-        return 'dep2: ' + dep1();
+        return 'dep2: ' + lib2();
       });
     }
   };

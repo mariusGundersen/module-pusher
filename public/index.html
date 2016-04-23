@@ -4,16 +4,17 @@
 <script>
   navigator.serviceWorker.onerror = function(e){
     console.error(e);
-  }
+  };
+
   navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
     console.log('Service worker registered');
     console.log(reg.waiting, reg.installing, reg.active);
 
     console.log('import');
-    System.import('modules/mymodule.js').then(function(m) {
-      new m.q();
-    }, e => console.error(e.message, e.stack));
-  }, e => console.error(e));
+    return System.import('modules/page1.js').then(function(m) {
+      new m.Page1();
+    });
+  }).catch(e => console.error(e.message, e.stack));
 
   function unregister(){
     navigator.serviceWorker.getRegistrations().then(function(regs){
@@ -23,7 +24,13 @@
       });
     });
   }
+
+  function clearCache(){
+    navigator.serviceWorker.controller.postMessage({command: 'clearCache'});
+  }
 </script>
 
 <a href="page2.html">Page2</a>
+<hr />
 <button type="button" onclick="unregister()">Unregister</button>
+<button type="button" onclick="clearCache()">Clear cache</button>

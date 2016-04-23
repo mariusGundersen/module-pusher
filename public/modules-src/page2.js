@@ -1,7 +1,8 @@
-import dep2 from 'modules/dep2.js';
+import dep3 from 'modules/dep3.js';
+import dep4 from 'modules/dep4.js';
 
-export default class Page2{
-  constructor(){
-    console.log('page2', dep2());
+export class Page2 {
+  constructor() {
+    console.log('Page2', dep3(), dep4());
   }
 }
