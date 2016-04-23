@@ -14,7 +14,7 @@ export default async function(){
 
   var router = new Router();
   router.use(function(req, res, next){
-    if (res.push && req.url.includes('/modules/')) {
+    if (res.push && /^\/modules\/.*\.js$/.test(req.url)) {
       console.log(' ');
       tryPush(req, res);
     }
@@ -22,7 +22,7 @@ export default async function(){
   });
 
   router.use('/node_modules',express.static('node_modules', {
-    maxAge: 60*60*24
+    maxAge: 60*60*24*1000
   }));
 
   router.use('/',express.static('public/bin', {
