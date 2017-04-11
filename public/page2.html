@@ -1,13 +1,8 @@
 <!doctype html>
 
-<script src="/node_modules/systemjs/dist/system-register-only.js"></script>
-<script>
-  System.import('modules/page2.js').then(function(m) {
-    document.querySelector('pre').innerText = m.default().join('\n')+'\n'+window.performance.now();
-  });
-</script>
-
 <h1>Page 2</h1>
 <pre></pre>
 <hr />
 <a href="index.html">Home</a> | <a href="page3.html">Page 3</a>
+
+<script type="module" src="modules/page2.js"></script>

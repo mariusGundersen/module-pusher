@@ -1,20 +1,11 @@
 <!doctype html>
 
-<script src="/node_modules/systemjs/dist/system-register-only.js"></script>
 <script>
   navigator.serviceWorker.onerror = function(e){
     console.error(e);
   };
 
-  navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
-    console.log('Service worker registered');
-    console.log(reg.waiting, reg.installing, reg.active);
-
-    console.log('import');
-    return System.import('modules/page1.js').then(function(m) {
-      document.querySelector('pre').innerText = m.default().join('\n')+'\n'+window.performance.now();
-    });
-  }).catch(e => console.error(e.message, e.stack));
+  navigator.serviceWorker.register('./service-worker.js');
 
   function unregister(){
     navigator.serviceWorker.getRegistrations().then(function(regs){
@@ -37,3 +28,8 @@
 <hr />
 <button type="button" onclick="unregister()">Unregister</button>
 <button type="button" onclick="clearCache()">Clear cache</button>
+
+<script>
+  document.querySelector('pre').innerText = window.performance.now() + '\n';
+</script>
+<script type="module" src="modules/page1.js"></script>

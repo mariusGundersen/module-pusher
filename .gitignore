@@ -1,6 +1,5 @@
 node_modules
 public/bin
-public/modules
 /bin
 certs
 !certs/localhost.*

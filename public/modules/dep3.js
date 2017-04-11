@@ -1,6 +1,6 @@
-import lib2 from 'modules/lib2.js';
+import lib2 from '/modules/lib2.js';
 
 export default () => [
-  'dep2',
+  'dep3',
   ...lib2().map(x => ` ${x}`)
 ];
