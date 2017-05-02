@@ -33,6 +33,9 @@ export default async function(){
         try{
           console.log('⇐', name);
           const push = res.push(name);
+          push.stream.on('error', error => {
+            push.stream.removeAllListeners();
+          });
           push.setHeader('content-type', 'application/javascript');
           push.writeHead(200);
           fs.createReadStream(path.join(process.cwd(), 'public', name)).pipe(push);
