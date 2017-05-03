@@ -1,34 +1,7 @@
 <!doctype html>
 
-<script>
-  navigator.serviceWorker.onerror = function(e){
-    console.error(e);
-  };
-
-  navigator.serviceWorker.register('./service-worker.js');
-
-  function unregister(){
-    navigator.serviceWorker.getRegistrations().then(function(regs){
-      regs.forEach(function(reg){
-        console.log('Service worker unregistered', reg);
-        reg.unregister();
-      });
-    });
-  }
-
-  function clearCache(){
-    navigator.serviceWorker.controller.postMessage({command: 'clearCache'});
-  }
-</script>
-
 <h1>Home</h1>
 <pre></pre>
-<hr />
-<a href="page2.html">Page 2</a> | <a href="page3.html">Page 3</a>
-<hr />
-<button type="button" onclick="unregister()">Unregister</button>
-<button type="button" onclick="clearCache()">Clear cache</button>
-
 <script>
   document.querySelector('pre').innerText = window.performance.now() + '\n';
 </script>
