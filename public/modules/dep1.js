@@ -1,4 +1,4 @@
-import lib1 from 'modules/lib1.js';
+import lib1 from '/modules/lib1.js';
 
 export default () => [
   'dep1',

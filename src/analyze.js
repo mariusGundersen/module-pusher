@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'fs-promise';
 import glob from 'glob-promise';
 import path from 'path';
-import System from 'systemjs';
+import precinct from 'precinct';
 
 export default async function(){
   console.log(__dirname);
@@ -10,20 +10,17 @@ export default async function(){
 
   console.log(files);
 
-  System.config({
-    baseURL: '/public',
-    normalize: name => name,
-    locate: load => path.join(process.cwd(), 'public', load.name),
-    fetch: path => fs.readFile(path.address, 'utf8')
+  const nameAndContent = files.map(async name => {
+    const content = await fs.readFile(path.join('public', name), 'utf-8');
+    const depTree = precinct(content, {type: 'es6'});
+    return ['/'+name, depTree];
   });
 
-  await Promise.all(files.map(file => System.import(file)))
+  const depLinks = new Map(await Promise.all(nameAndContent));
   const modules = new Map();
-  for(var name in System._loader.moduleRecords){
-    var record = System._loader.moduleRecords[name];
-    modules.set('/'+name, {
-      dependencies: flattenDepTree(record.dependencies.map(x => x.name), System._loader.moduleRecords, [record.name])
-      .map(dep => '/'+dep)
+  for(var [name, deps] of depLinks){
+    modules.set(name, {
+      dependencies: flattenDepTree(deps, depLinks, [name])
     });
   }
   console.log(modules);
@@ -32,8 +29,8 @@ export default async function(){
 
 function flattenDepTree(imports, tree, ignore){
   var deps = _.chain(imports)
-    .flatMap(imp => tree[imp].dependencies)
-    .map(imp => imp.name)
+    .flatMap(imp => tree.get(imp))
+    .map(imp => imp)
     .uniq()
     .difference(ignore)
     .value();

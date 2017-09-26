@@ -21,10 +21,6 @@ export default async function(){
     next();
   });
 
-  router.use('/node_modules', serveStatic('node_modules', {
-    maxAge: 60*60*24*1000
-  }));
-
   router.use('/', serveStatic('public/bin', {
     maxAge: 0,
     etag: false,
