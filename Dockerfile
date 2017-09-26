@@ -1,4 +1,4 @@
-FROM node:4.2-onbuild
+FROM node:8-onbuild
 
 ENV PORT=443
 EXPOSE 443
